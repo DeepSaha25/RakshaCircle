@@ -366,6 +366,7 @@ const SubmissionMvp = () => {
             <textarea value={ackNote} onChange={(event) => setAckNote(event.target.value)} />
             <div className="events-list">
               {events.length === 0 && <p className="muted">No alerts yet.</p>}
+              {/* Show only the last 5 events, most recent first */}
               {events.slice(0, 5).map((item) => (
                 <div key={item.id} className="event-card">
                   <p>
