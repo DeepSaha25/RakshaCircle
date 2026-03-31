@@ -232,7 +232,7 @@ const SubmissionMvp = () => {
       <section className="submission-grid">
         <article className="submission-card">
           <h2>1. Profile</h2>
-          <form onSubmit={handleSaveProfile} className="stack">
+          <form onSubmit={handleSaveProfile} className="stack" style={{ position: 'relative' }}>
             <label>
               Name
               <input
@@ -245,6 +245,24 @@ const SubmissionMvp = () => {
             <button className="primary" type="submit" disabled={isBusy || !walletAddress}>
               Save Profile
             </button>
+            {isBusy && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'rgba(255,255,255,0.7)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2,
+                borderRadius: '0.5em',
+              }}>
+                <div className="spinner" style={{ width: 32, height: 32, border: '4px solid #ccc', borderTop: '4px solid #ff2d2d', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+              </div>
+            )}
           </form>
           <p className="muted" style={{ fontSize: '0.92em', marginTop: '0.5em' }}>
             <strong>Privacy Note:</strong> Your name and wallet address are stored securely. Only critical verification data is recorded on-chain. No sensitive personal data is shared publicly.
