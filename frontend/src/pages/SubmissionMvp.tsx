@@ -63,8 +63,8 @@ const SubmissionMvp = () => {
           setMessage(`Wallet connected: ${shortenWallet(publicKey)}`);
           await loadAll(publicKey);
           return;
-        } catch {
-          setMessage('Freighter was detected but the connection was rejected.', true);
+        } catch (err) {
+          setMessage('Freighter wallet detected, but connection was rejected. Please approve the connection in your browser extension and ensure you are on the Stellar testnet. If the problem persists, try refreshing the page or reinstalling Freighter.', true);
           return;
         }
       }
@@ -188,6 +188,31 @@ const SubmissionMvp = () => {
 
   return (
     <main className="submission-page">
+      {isBusy && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(15,23,42,0.45)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <div style={{
+            width: 56,
+            height: 56,
+            border: '6px solid #38bdf8',
+            borderTop: '6px solid #0ea5e9',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            background: 'rgba(15,23,42,0.7)'
+          }} />
+          <style>{`@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }`}</style>
+        </div>
+      )}
       <section className="submission-card hero-card">
         <p className="eyebrow">RakshaCircle</p>
         <h1>Submission MVP Dashboard</h1>
@@ -221,6 +246,9 @@ const SubmissionMvp = () => {
               Save Profile
             </button>
           </form>
+          <p className="muted" style={{ fontSize: '0.92em', marginTop: '0.5em' }}>
+            <strong>Privacy Note:</strong> Your name and wallet address are stored securely. Only critical verification data is recorded on-chain. No sensitive personal data is shared publicly.
+          </p>
         </article>
 
         <article className="submission-card">
@@ -233,11 +261,29 @@ const SubmissionMvp = () => {
                   onChange={(event) => handleContactChange(index, 'name', event.target.value)}
                   placeholder="Contact name"
                 />
-                <input
-                  value={contact.walletAddress || ''}
-                  onChange={(event) => handleContactChange(index, 'walletAddress', event.target.value)}
-                  placeholder="Contact wallet"
-                />
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input
+                    value={contact.walletAddress || ''}
+                    onChange={(event) => handleContactChange(index, 'walletAddress', event.target.value)}
+                    placeholder="Contact wallet"
+                    aria-label="Contact wallet address"
+                  />
+                  <span
+                    title="Enter the full Stellar wallet address of your trusted contact."
+                    style={{
+                      position: 'absolute',
+                      right: 8,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#38bdf8',
+                      cursor: 'pointer',
+                      fontSize: '1.1em',
+                      userSelect: 'none',
+                    }}
+                  >
+                    ℹ️
+                  </span>
+                </div>
                 <input
                   value={contact.phone || ''}
                   onChange={(event) => handleContactChange(index, 'phone', event.target.value)}
@@ -305,7 +351,7 @@ const SubmissionMvp = () => {
             <textarea value={ackNote} onChange={(event) => setAckNote(event.target.value)} />
             <div className="events-list">
               {events.length === 0 && <p className="muted">No alerts yet.</p>}
-              {events.map((item) => (
+              {events.slice(0, 5).map((item) => (
                 <div key={item.id} className="event-card">
                   <p>
                     <strong>{item.eventType}</strong> · {new Date(item.timestamp).toLocaleString()}
@@ -318,6 +364,7 @@ const SubmissionMvp = () => {
                   </button>
                 </div>
               ))}
+              {events.length > 5 && <p className="muted">Showing latest 5 events.</p>}
             </div>
           </div>
         </article>
