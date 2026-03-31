@@ -64,7 +64,7 @@ const SubmissionMvp = () => {
           await loadAll(publicKey);
           return;
         } catch (err) {
-          setMessage('Freighter wallet detected, but connection was rejected. Please approve the connection in your browser extension and ensure you are on the Stellar testnet. If the problem persists, try refreshing the page or reinstalling Freighter.', true);
+          setMessage('Wallet connection failed: Please ensure you have the Freighter extension installed, are logged in, and have approved the connection. Make sure your network is set to Stellar Testnet. If you continue to have issues, try refreshing the page, reinstalling Freighter, or check for browser extension conflicts. For help, see the FAQ in the README.', true);
           return;
         }
       }
