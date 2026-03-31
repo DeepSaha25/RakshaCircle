@@ -300,12 +300,27 @@ const SubmissionMvp = () => {
               </button>
             </div>
           </div>
-        </article>
-
-        <article className="submission-card">
-          <h2>3. Trigger SOS</h2>
-          <div className="stack">
-            <label>
+                        <input
+                          value={contact.walletAddress || ''}
+                          onChange={(event) => handleContactChange(index, 'walletAddress', event.target.value)}
+                          placeholder="Contact wallet"
+                          aria-label="Contact wallet address"
+                          style={{ paddingRight: '2rem' }}
+                        />
+                        <span
+                          style={{
+                            position: 'absolute',
+                            right: 4,
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            cursor: 'pointer',
+                            color: '#888',
+                            fontSize: '1.1em',
+                          }}
+                          title="Enter the Stellar wallet address of your trusted contact. They will receive your SOS alerts."
+                        >
+                          ℹ️
+                        </span>
               Event Type
               <select value={eventType} onChange={(event) => setEventType(event.target.value)}>
                 <option value="SOS">SOS</option>
