@@ -1,0 +1,30 @@
+[package]
+name = "raksha-safety"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+soroban-sdk = { version = "=20.0.0", features = ["testutils"] }
+soroban-contract = "20.0.0"
+
+[package.metadata.defs]
+raksha_safety_contract = { xdr_version = "high_res_code_points" }
+
+[[example]]
+name = "soroban_examples_alloc"
+path = "examples/soroban_examples_alloc.rs"
+
+[[bin]]
+name = "raksha_safety"
+path = "src/lib.rs"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.release-with-logs]
+inherits = "release"
+debug = true
