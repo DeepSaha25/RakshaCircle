@@ -63,6 +63,21 @@
   flex-wrap: wrap;
 }
 
+.inline-toggle {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.35);
+}
+
+.inline-toggle input {
+  width: auto;
+  margin: 0;
+}
+
 label {
   display: flex;
   flex-direction: column;
@@ -157,8 +172,122 @@ button:disabled {
   background: rgba(2, 6, 23, 0.5);
 }
 
+.readiness-card {
+  margin-top: 1rem;
+}
+
+.card-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.readiness-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metric-card,
+.mini-panel {
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.45);
+  padding: 0.9rem;
+}
+
+.metric-card span {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metric-card strong {
+  display: block;
+  margin: 0.45rem 0 0.2rem;
+  font-size: 1.65rem;
+}
+
+.metric-card small {
+  color: #cbd5e1;
+}
+
+.readiness-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.mini-panel h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.endpoint-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.endpoint-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.12);
+  color: #7dd3fc;
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  font-size: 0.8rem;
+}
+
+.checklist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.checklist-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.checklist-item.complete span {
+  color: #4ade80;
+}
+
+.checklist-item.needs-review span {
+  color: #fbbf24;
+}
+
+.compact-event-card {
+  padding: 0.65rem 0.75rem;
+}
+
 @media (max-width: 900px) {
   .submission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-grid,
+  .readiness-columns {
     grid-template-columns: 1fr;
   }
 }

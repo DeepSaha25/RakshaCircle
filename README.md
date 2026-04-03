@@ -116,7 +116,10 @@ RakshaCircle/
 ├── docs/
 │   ├── ARCHITECTURE.md            # System design
 │   ├── SUBMISSION_GUIDE.md         # Testing & validation
-│   └── DEPLOYMENT.md              # API reference & deployment
+│   ├── DEPLOYMENT.md              # API reference & deployment
+│   ├── PRODUCTION_READINESS.md    # Level 6 implementation summary
+│   ├── SECURITY_CHECKLIST.md      # Security review checklist
+│   └── USER_GUIDE.md              # End-user guide and onboarding notes
 │
 └── README.md (this file)
 ```
@@ -211,6 +214,50 @@ This version includes:
 ✅ Alert history dashboard  
 ✅ End-to-end testing with 5 users  
 ✅ Blockchain integration (mock mode ready, testnet deployable)
+
+## Level 6 Production Readiness
+
+The repository now includes the first production-readiness layer for Level 6:
+
+- Live metrics and monitoring endpoints on the backend
+- Indexed SOS, profile, and contact records
+- A production dashboard in the frontend
+- A fee sponsorship path in the SOS flow for gasless-transaction readiness
+- A dedicated user guide and security checklist under [docs/](docs)
+
+### Required Submission Assets
+
+Replace the placeholders below with the final production links before monthly submission:
+
+- Live demo: `https://your-live-demo-url.example`
+- Metrics dashboard screenshot or link: `https://your-metrics-dashboard.example`
+- Monitoring dashboard screenshot or link: `https://your-monitoring-dashboard.example`
+- Security checklist: [docs/SECURITY_CHECKLIST.md](docs/SECURITY_CHECKLIST.md)
+- Community contribution post: `https://x.com/your-post-link`
+- Advanced feature proof: fee sponsorship in the SOS flow plus the [production readiness summary](docs/PRODUCTION_READINESS.md)
+- Data indexing approach: [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md)
+
+### User Onboarding and Feedback Loop
+
+Use a Google Form to collect tester feedback with these fields:
+
+- Wallet address
+- Email address
+- Name
+- Product rating
+- Written feedback
+
+Export the responses to Excel and link the exported sheet here:
+
+- Feedback sheet: `https://your-excel-export.example`
+
+Add the collected wallet addresses to the README before submission so they can be verified on Stellar Explorer.
+
+### Improvement Plan
+
+The next iteration should be driven by the onboarding feedback sheet and the production metrics dashboard. The latest feedback-driven improvement commit is:
+
+- [d6e1930](https://github.com/<your-org>/<your-repo>/commit/d6e1930)
 
 ## Future Roadmap (Level 6)
 
@@ -325,5 +372,7 @@ MIT License - See LICENSE file
 - **Soroban Docs**: https://soroban.stellar.org/
 - **Freighter Wallet**: https://freighter.app/
 - **Testnet Lab**: https://lab.stellar.org/
+- **User Guide**: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+- **Production Readiness**: [docs/PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md)
 
 

@@ -17,7 +17,68 @@ export type SosEvent = {
   contextHash: string;
   locationHint: string;
   status: 'active' | 'acknowledged';
+  };
+};
   timestamp: string;
+export type ProductionReadinessResponse = {
+  generatedAt: string;
+  metrics: {
+    verifiedUsers: number;
+    activeUsers24h: number;
+    activeUsers30d: number;
+    totalEvents: number;
+    totalAcknowledgments: number;
+    totalContacts: number;
+    transactions: number;
+    retentionRate30d: number;
+    avgAcknowledgmentsPerEvent: number;
+    lastActivityAt: string | null;
+    indexedRecords: number;
+  };
+  monitoring: {
+    status: string;
+    uptimeSeconds: number;
+    nodeVersion: string;
+    memoryUsageMb: {
+      rssMb: number;
+      heapUsedMb: number;
+      heapTotalMb: number;
+      externalMb: number;
+    };
+    logging: string;
+    rateLimit: string;
+    soroban: Record<string, unknown>;
+    lastActivityAt: string | null;
+    recentActivity: Array<{
+      type: string;
+      walletAddress: string;
+      timestamp: string;
+      details: Record<string, unknown>;
+    }>;
+  };
+  indexing: {
+    totalProfilesIndexed: number;
+    totalContactsIndexed: number;
+    totalEventsIndexed: number;
+    indexedWallets: string[];
+    recentEvents: Array<{
+      id: string;
+      walletAddress: string;
+      eventType: string;
+      status: string;
+      timestamp: string;
+      locationHint: string;
+      acknowledgments: number;
+      contextHash: string;
+    }>;
+    searchEndpoints: string[];
+  };
+  securityChecklist: Array<{
+    item: string;
+    status: 'complete' | 'needs-review';
+    evidence: string;
+  }>;
+};
   acknowledgments: Array<{
     contactWallet: string;
     note: string;
@@ -76,6 +137,7 @@ export async function triggerSos(payload: {
   eventType: string;
   contextText: string;
   locationHint: string;
+  useFeeSponsorship?: boolean;
 }) {
   const response = await fetch(`${apiPrefix}/sos`, {
     method: 'POST',
@@ -83,7 +145,7 @@ export async function triggerSos(payload: {
     body: JSON.stringify(payload),
   });
 
-  return parseResponse<{ event: SosEvent }>(response);
+  return parseResponse<{ event: SosEvent; feeSponsorship: unknown }>(response);
 }
 
 export async function acknowledgeEvent(eventId: string, contactWallet: string, note: string) {
@@ -99,4 +161,9 @@ export async function acknowledgeEvent(eventId: string, contactWallet: string, n
 export async function getEvents(walletAddress: string) {
   const response = await fetch(`${apiPrefix}/events/${encodeURIComponent(walletAddress)}`);
   return parseResponse<{ events: SosEvent[] }>(response);
+}
+
+export async function getProductionReadiness() {
+  const response = await fetch(`${apiPrefix}/production-readiness`);
+  return parseResponse<ProductionReadinessResponse>(response);
 }

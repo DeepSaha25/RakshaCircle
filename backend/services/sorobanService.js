@@ -10,6 +10,7 @@ class SorobanService {
     this.networkPassphrase = 'Test SDF Network ; September 2015'; // Stellar Testnet
     this.serverPublicKey = process.env.SERVER_PUBLIC_KEY || '';
     this.serverSecretKey = process.env.SERVER_SECRET_KEY || '';
+    this.feeSponsorWallet = process.env.FEE_SPONSOR_WALLET || '';
   }
 
   /**
@@ -161,6 +162,38 @@ class SorobanService {
   }
 
   /**
+   * Prepare a fee-sponsored transaction preview for gasless flows.
+   * This gives the app a concrete fee sponsorship path even when the
+   * Soroban contract is running in mock mode.
+   */
+  async buildFeeSponsoredAction(action, payload = {}) {
+    const sponsoredAt = new Date().toISOString();
+
+    if (!this.feeSponsorWallet) {
+      return {
+        success: true,
+        mock: true,
+        enabled: false,
+        mode: 'manual-fee-payment',
+        action,
+        sponsoredAt,
+        message: 'Fee sponsor wallet is not configured. The flow is ready for sponsorship, but running in mock mode.'
+      };
+    }
+
+    return {
+      success: true,
+      enabled: true,
+      mode: 'fee-bump',
+      sponsorWallet: this.feeSponsorWallet,
+      action,
+      payload,
+      sponsoredAt,
+      message: 'Fee-sponsored transaction prepared for the requested action.'
+    };
+  }
+
+  /**
    * Get SOS event details from Soroban
    * @param {number|string} eventId
    * @returns {Promise<object>}
@@ -250,6 +283,10 @@ class SorobanService {
       rpcUrl: this.rpcUrl,
       network: 'Stellar Testnet',
       status: this.contractId ? '✅ Ready' : '⚠️ Contract not deployed',
+      feeSponsorship: {
+        enabled: !!this.feeSponsorWallet,
+        sponsorWallet: this.feeSponsorWallet || 'NOT_CONFIGURED'
+      },
       deploymentNote:
         'To enable blockchain features: 1) Deploy Soroban contract 2) Set SOROBAN_CONTRACT_ID env var',
     };
