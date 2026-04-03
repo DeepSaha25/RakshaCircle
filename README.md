@@ -238,6 +238,10 @@ The repository now includes a production-readiness layer for Level 6 with live b
 
 Open the submission dashboard and click **Load 30+ Demo Users** to populate the app with the seeded review dataset. The scenario includes 30 verified users, multiple trusted contacts per user, and historical SOS/check-in activity across the last 30 days.
 
+### Community Contribution Draft
+
+See [docs/COMMUNITY_CONTRIBUTION.md](docs/COMMUNITY_CONTRIBUTION.md) for a publish-ready community post draft. Replace it with the live post URL once published.
+
 ### Backend Demo Seeding
 
 - `POST /api/v1/raksha/seed-demo` with `{"users": 30}`
