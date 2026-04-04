@@ -8,6 +8,18 @@ This guide is written for a fresh deployment where nothing is deployed yet.
 - Frontend App: Vercel Project
 - Smart Contract: Soroban on Stellar Testnet
 
+## If Backend Is Already Deployed
+
+If your backend is already live at `https://rakshacircle-backend.onrender.com`, continue from Step 3.
+
+You only need to do these next:
+
+1. Deploy smart contract (Step 3)
+2. Add `SOROBAN_CONTRACT_ID` in Render backend env and redeploy
+3. Deploy frontend with:
+  - `VITE_API_BASE_URL=https://rakshacircle-backend.onrender.com`
+4. Set backend `CORS_ORIGIN` to your final Vercel URL and redeploy once
+
 ## Step 0: Prepare Required Accounts and Tools
 
 1. Create accounts:
@@ -48,7 +60,7 @@ ENABLE_DEMO_SEED=false
 
 # Contract settings (set SOROBAN_CONTRACT_ID after Step 3)
 SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
-SOROBAN_CONTRACT_ID=
+SOROBAN_CONTRACT_ID=CCTDYXR5HVBLHG6ZZ3XSSZHBGUUFVPWLN36RVDNRNJVKLQQPPUXUN747
 
 # Optional advanced settings
 NIRBHAYA_SERVICE_URL=
@@ -84,34 +96,77 @@ Expected:
 
 ## Step 3: Deploy Soroban Smart Contract
 
-From repository root:
+From repository root (Windows PowerShell):
 
-1. Build contract
+1. Install wasm target once
+
+```powershell
+rustup target add wasm32-unknown-unknown
+```
+
+2. Build contract
 
 ```bash
 cd contracts/raksha-safety
 cargo build --target wasm32-unknown-unknown --release
 ```
 
-2. Deploy to testnet
+Expected output file:
 
-```bash
-soroban contract deploy \
-  --wasm target/wasm32-unknown-unknown/release/raksha_safety.wasm \
-  --source <your-account-secret> \
-  --network testnet
+- `contracts/raksha-safety/target/wasm32-unknown-unknown/release/raksha_safety.wasm`
+
+3. Add deploy key identity (recommended)
+
+```powershell
+soroban keys add deployer --secret-key --network testnet
 ```
 
-3. Copy returned contract id (starts with `C`)
-4. In Render backend env, set `SOROBAN_CONTRACT_ID=<that_contract_id>`
-5. Redeploy backend
+When prompted, paste your testnet secret key (starts with `S...`).
+
+4. Deploy to testnet
+
+```powershell
+soroban contract deploy --wasm target/wasm32-unknown-unknown/release/raksha_safety.wasm --source-account deployer --network testnet --alias raksha_safety
+```
+
+5. Copy returned contract id (starts with `C`)
+6. In Render backend env, set `SOROBAN_CONTRACT_ID=CCTDYXR5HVBLHG6ZZ3XSSZHBGUUFVPWLN36RVDNRNJVKLQQPPUXUN747`
+7. Redeploy backend
+
+Step 3 troubleshooting:
+
+1. `no matching package named soroban-contract found`
+- Fix: pull latest repository changes where contract manifest has been corrected.
+
+2. Build succeeds in one terminal but fails in another
+- Cause: old terminal still in a different directory/session.
+- Fix: run with absolute path:
+
+```powershell
+Set-Location "C:/Users/Deep Saha/Desktop/level 5/contracts/raksha-safety"
+cargo build --target wasm32-unknown-unknown --release
+```
+
+3. `target wasm32-unknown-unknown not installed`    
+- Run: `rustup target add wasm32-unknown-unknown`
+
+4. Contract deploy fails due source/network
+- Verify source secret is funded on Stellar testnet.
+- Verify Soroban CLI is configured for testnet.
+
+5. `unexpected argument` when using `soroban keys add ... --secret-key S...`
+- In Soroban v25, use `--secret-key` without value, then paste the key when prompted.
+
+6. PowerShell parser errors for multi-line command
+- Do not use bash-style `\` line continuations in PowerShell.
+- Prefer a single-line command as shown above.
 
 ## Step 4: Configure Frontend Environment
 
 Use this exact frontend env template:
 
 ```env
-VITE_API_BASE_URL=https://your-backend-url.onrender.com
+VITE_API_BASE_URL=https://rakshacircle-backend.onrender.com
 VITE_API_KEY=replace_with_same_app_api_key
 VITE_GOOGLE_MAPS_API_KEY=replace_with_google_maps_browser_key
 ```
@@ -142,7 +197,7 @@ npm run backend:smoke
 
 Production checks:
 
-1. `GET https://your-backend-url.onrender.com/health`
+1. `GET https://rakshacircle-backend.onrender.com/health`
 2. Open frontend Vercel URL
 3. Create profile
 4. Save trusted contacts
@@ -164,8 +219,8 @@ Production checks:
 - Fix: set exact frontend URL (including https)
 
 3. On-chain data not recorded
-- Cause: `SOROBAN_CONTRACT_ID` missing
-- Fix: complete Step 3 and redeploy backend
+- Cause: wrong or missing `SOROBAN_CONTRACT_ID`
+- Fix: set `SOROBAN_CONTRACT_ID=CCTDYXR5HVBLHG6ZZ3XSSZHBGUUFVPWLN36RVDNRNJVKLQQPPUXUN747` and redeploy backend
 
 4. Route/chat issues
 - Cause: missing Maps or Gemini keys

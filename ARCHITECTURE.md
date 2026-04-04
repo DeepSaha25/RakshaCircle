@@ -340,7 +340,8 @@ RakshaCircle/
 └── docs/
     ├── ARCHITECTURE.md
     ├── DEPLOYMENT.md
-    └── SUBMISSION_GUIDE.md
+  ├── SECURITY_CHECKLIST.md
+  └── USER_GUIDE.md
 ```
 
 ## Environment Variables

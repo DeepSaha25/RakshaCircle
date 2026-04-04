@@ -1,6 +1,6 @@
 #![no_std]
 
-use soroban_sdk::{contract, contractimpl, contracttype, log, symbol_short, Address, BytesN, Env, Map, String, Vec, U256};
+use soroban_sdk::{contract, contractimpl, contracttype, log, Address, Env, String, Vec, U256};
 
 // Data structures
 #[derive(Clone)]
@@ -49,7 +49,7 @@ impl RakshaSafetyContract {
         let profile = UserProfile {
             wallet: wallet.clone(),
             name,
-            created_at: env.block().timestamp(),
+            created_at: env.ledger().timestamp(),
         };
 
         env.storage()
@@ -108,26 +108,28 @@ impl RakshaSafetyContract {
     ) -> SOSEvent {
         user.require_auth();
 
-        let mut next_id: U256 = env
+        let mut next_id: u32 = env
             .storage()
             .persistent()
             .get(&DataKey::NextEventId)
-            .unwrap_or(U256::from_u32(&env, 1));
+            .unwrap_or(1);
+
+        let event_id = U256::from_u32(&env, next_id);
 
         let event = SOSEvent {
-            id: next_id.clone(),
+            id: event_id.clone(),
             user_wallet: user.clone(),
             event_type,
             context_hash,
-            timestamp: env.block().timestamp(),
+            timestamp: env.ledger().timestamp(),
             acknowledged_by: Vec::new(&env),
         };
 
         env.storage()
             .persistent()
-            .set(&DataKey::Event(next_id.clone()), &event);
+            .set(&DataKey::Event(event_id), &event);
 
-        next_id = U256::from_u32(&env, next_id.u32() + 1);
+        next_id += 1;
         env.storage()
             .persistent()
             .set(&DataKey::NextEventId, &next_id);
@@ -178,7 +180,7 @@ impl RakshaSafetyContract {
 mod tests {
     use super::*;
     use soroban_sdk::testutils::{Address as _, Ledger};
-    use soroban_sdk::{symbol_short, Env};
+    use soroban_sdk::Env;
 
     #[test]
     fn test_register_user() {

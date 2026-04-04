@@ -19,8 +19,25 @@ export async function buildApp() {
 
     // Global Plugins
     const allowAllOrigins = config.corsOrigin === '*';
+    const normalizeOrigin = (value = '') => String(value).replace(/\/+$/, '');
+    const allowedOrigins = config.corsOrigin
+        .split(',')
+        .map((origin) => normalizeOrigin(origin.trim()))
+        .filter(Boolean);
+
     await app.register(cors, {
-        origin: allowAllOrigins ? true : config.corsOrigin,
+        origin: allowAllOrigins
+            ? true
+            : (origin, callback) => {
+                if (!origin) {
+                    callback(null, true);
+                    return;
+                }
+
+                const requestOrigin = normalizeOrigin(origin);
+                const isAllowed = allowedOrigins.includes(requestOrigin);
+                callback(null, isAllowed);
+            },
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']
     });

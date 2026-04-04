@@ -12,10 +12,10 @@ Below is a summary table of user feedback collected during the 5-user validation
 | Suresh K.     | suresh.kumar@email.com | G5678IJKL9012MNOP3456QRST7890UVWXYZ1234ABCD5678EFGH | "SOS alert sent, but no confirmation message appeared."                       | 4d5e6f7           |
 | Meera D.      | meera.das@email.com    | G9012MNOP3456QRST7890UVWXYZ1234ABCD5678EFGH1234IJKL | "Great experience overall. Would like dark mode in future versions."         | 5e6f7g8           |
 
-## Feedback Form Template
+## Documentation
 
-A sample of the Google Form used for collecting user feedback is available in USER_FEEDBACK.md.
+For deployment, architecture, and submission evidence, refer to the root project documentation:
 
----
-
-For more details, see the [Submission & Testing Guide](SUBMISSION_GUIDE.md).
+- ../README.md
+- ../DEPLOYMENT.md
+- ../ARCHITECTURE.md
