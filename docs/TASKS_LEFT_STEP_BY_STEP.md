@@ -9,14 +9,13 @@ Date: 2026-04-04
 | 30+ verified active users | Completed | 31-user onboarding dataset and wallet list added in README with source sheet link. |
 | User onboarding form | Completed | Google Form link available and documented in README. |
 | Feedback export for analysis | Completed | Google Sheets export link added in README. |
-| Minimum 15+ meaningful commits | Completed | Verified with git history (21+ commits before this update). |
+| Minimum 15+ meaningful commits | Completed | Verified with git history (23 commits currently). |
 
 ## Remaining Tasks Only
 
 | Priority | Task | Why It Is Still Pending |
 |---|---|---|
 | P0 | Publish 1 community contribution post and add live URL in README checklist | Requirement says contribution must be externally verifiable. |
-| P0 | Replace any temporary commit placeholders in README with final commit IDs | Needed so each user row has a concrete commit reference. |
 | P1 | Add live deployment evidence for metrics/monitoring/indexing endpoints | Strengthens proof of production readiness during review. |
 | P1 | Run final submission sanity pass | Avoid broken links and stale checklist states. |
 
@@ -31,14 +30,7 @@ Date: 2026-04-04
    - Status: Implemented
    - Evidence: paste the live URL
 
-### Step 2: Finalize Commit IDs in Feedback Table (P0)
-
-1. Ensure all feedback-related commits are pushed.
-2. Replace temporary placeholder values in the README feedback table with real commit hashes.
-3. Keep direct commit links in the format:
-   - https://github.com/DeepSaha25/RakshaCircle/commit/<commit-hash>
-
-### Step 3: Add Live Endpoint Proof (P1)
+### Step 2: Add Live Endpoint Proof (P1)
 
 Add these links in [README.md](README.md) if deployed:
 1. Frontend live URL
@@ -47,7 +39,7 @@ Add these links in [README.md](README.md) if deployed:
 4. Indexing endpoint URL
 5. Production-readiness endpoint URL
 
-### Step 4: Final Validation (P1)
+### Step 3: Final Validation (P1)
 
 Run these checks before submission:
 1. All README links open.
