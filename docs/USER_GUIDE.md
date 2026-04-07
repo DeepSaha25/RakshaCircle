@@ -35,6 +35,17 @@ The production-readiness panel shows:
 - Indexed SOS events and search endpoints
 - Security checklist coverage
 
+## Quick Access from Lock Screen / Home Screen
+
+RakshaCircle does not ship a native lock-screen widget yet, but users can create near-instant access:
+
+1. Open RakshaCircle in mobile browser.
+2. Use browser menu and choose Add to Home Screen.
+3. Move the shortcut to first home-screen row.
+4. Enable browser quick launch from lock screen if your phone supports it.
+
+This keeps SOS access one tap away while native widget support is being evaluated.
+
 ## Notes for Demo Day
 
 - Keep the live demo link in the README current.
