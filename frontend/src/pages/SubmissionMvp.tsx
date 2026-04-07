@@ -312,6 +312,7 @@ const SubmissionMvp = () => {
                   onChange={(event) => handleContactChange(index, 'walletAddress', event.target.value)}
                   placeholder="Contact wallet"
                   aria-label="Contact wallet address"
+                  title="Paste a Stellar wallet address (starts with G and usually 56 characters)."
                 />
                 <input
                   value={contact.phone || ''}
@@ -328,6 +329,9 @@ const SubmissionMvp = () => {
                 Save Contacts
               </button>
             </div>
+            <p className="muted" style={{ margin: 0, fontSize: '0.85rem' }}>
+              Tip: Add at least one trusted contact with wallet and phone so SOS alerts can be acknowledged quickly.
+            </p>
           </div>
         </article>
 
