@@ -330,7 +330,7 @@ const SubmissionMvp = () => {
         </article>
 
         <article className="submission-card">
-          <h2>2. Trusted Circle</h2>
+          <h2>2. Trusted Circle (Family Monitoring)</h2>
           <details className="contacts-help">
             <summary>How do I update my emergency contacts?</summary>
             <p className="muted" style={{ margin: '0.45rem 0 0' }}>
