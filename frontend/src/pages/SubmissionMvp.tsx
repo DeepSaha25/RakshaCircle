@@ -341,6 +341,9 @@ const SubmissionMvp = () => {
         <p className="muted" style={{ marginTop: '0.1rem', fontSize: '0.84rem' }}>
           Blockchain safety layer: emergency events gain tamper-evident traceability for trusted follow-up.
         </p>
+        <p className="muted" style={{ marginTop: '0.1rem', fontSize: '0.84rem' }}>
+          Built as an everyday urban-safety companion for students, professionals, families, and late-night commuters.
+        </p>
         <p className="status-text">{statusMessage}</p>
       </section>
 
