@@ -40,6 +40,7 @@ const SubmissionMvp = () => {
   const [statusMessage, setStatusMessage] = useState('Connect wallet or load the demo scenario to begin.');
   const [isBusy, setIsBusy] = useState(false);
   const [dashboardRefreshKey, setDashboardRefreshKey] = useState(0);
+  const recentSosEvents = useMemo(() => events.filter((item) => item.eventType === 'SOS').slice(0, 5), [events]);
 
   const canUseApi = useMemo(() => walletAddress.trim().length > 0, [walletAddress]);
 
@@ -384,8 +385,8 @@ const SubmissionMvp = () => {
             </div>
             <textarea value={ackNote} onChange={(event) => setAckNote(event.target.value)} />
             <div className="events-list">
-              {events.length === 0 && <p className="muted">No alerts yet.</p>}
-              {events.slice(0, 5).map((item) => (
+              {recentSosEvents.length === 0 && <p className="muted">No SOS alerts yet.</p>}
+              {recentSosEvents.map((item) => (
                 <div key={item.id} className="event-card">
                   <p>
                     <strong>{item.eventType}</strong> · {new Date(item.timestamp).toLocaleString()}
@@ -398,7 +399,7 @@ const SubmissionMvp = () => {
                   </button>
                 </div>
               ))}
-              {events.length > 5 && <p className="muted">Showing latest 5 events.</p>}
+              {events.length > 5 && <p className="muted">Showing latest 5 SOS events.</p>}
             </div>
           </div>
         </article>
