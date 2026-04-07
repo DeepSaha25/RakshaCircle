@@ -249,6 +249,9 @@ const SubmissionMvp = () => {
           Lean end-to-end flow: wallet connect, profile setup, trusted circle, SOS trigger, acknowledgment,
           and tamper-proof style event history.
         </p>
+        <p className="muted" style={{ marginTop: '0.35rem', fontSize: '0.9rem' }}>
+          Guided flow: Connect Wallet -> Save Profile -> Save Contacts -> Trigger SOS -> Track Acknowledgments.
+        </p>
         <div className="wallet-row" style={{ gap: '0.75rem', flexWrap: 'wrap' }}>
           <button className="primary" onClick={handleConnectWallet} disabled={isBusy} type="button">
             Connect Freighter Wallet
