@@ -359,8 +359,9 @@ const SubmissionMvp = () => {
               />
             </label>
             <button className="danger" onClick={handleTriggerSos} type="button" disabled={isBusy || !walletAddress}>
-              Trigger SOS
+              TRIGGER EMERGENCY SOS NOW
             </button>
+            <p className="danger-hint">Use only for active emergencies. This sends immediate alerts to your trusted circle.</p>
           </div>
         </article>
 
