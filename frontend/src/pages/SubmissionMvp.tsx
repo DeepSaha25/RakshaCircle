@@ -257,6 +257,12 @@ const SubmissionMvp = () => {
         <p className="muted" style={{ marginTop: '0.35rem', fontSize: '0.9rem' }}>
           Guided flow: Connect Wallet -> Save Profile -> Save Contacts -> Trigger SOS -> Track Acknowledgments.
         </p>
+        <details className="contacts-help" style={{ marginTop: '0.6rem' }}>
+          <summary>New here? Start tutorial</summary>
+          <p className="muted" style={{ margin: '0.45rem 0 0' }}>
+            1) Connect wallet. 2) Save your profile. 3) Add at least one trusted contact. 4) Use Trigger SOS only in emergencies.
+          </p>
+        </details>
         <div className="wallet-row" style={{ gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
             className="ghost"
