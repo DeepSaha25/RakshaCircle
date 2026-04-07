@@ -278,7 +278,7 @@ const SubmissionMvp = () => {
               {isProfileSaving ? 'Saving Profile...' : 'Save Profile'}
             </button>
             <p className="muted" style={{ fontSize: '0.92em', marginTop: '0.5em' }}>
-              <strong>Privacy:</strong> Your name and wallet address are only used for emergency coordination. No sensitive data is shared publicly. You can delete your profile at any time.
+              <strong>Privacy:</strong> Your name and wallet are used only for emergency coordination. Personal profile data remains off-chain.
             </p>
             {isProfileSaving && (
               <div style={{
@@ -300,7 +300,7 @@ const SubmissionMvp = () => {
             )}
           </form>
           <p className="muted" style={{ fontSize: '0.92em', marginTop: '0.5em' }}>
-            <strong>Privacy Note:</strong> Your name and wallet address are stored securely. Only critical verification data is recorded on-chain. No sensitive personal data is shared publicly.
+            <strong>Privacy Note:</strong> Only event verification hashes are anchored on-chain. No phone number or free-text context is written to blockchain.
           </p>
         </article>
 
