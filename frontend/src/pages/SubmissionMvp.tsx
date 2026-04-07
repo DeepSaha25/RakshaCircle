@@ -320,6 +320,9 @@ const SubmissionMvp = () => {
         <p className="muted" style={{ marginTop: '0.1rem', fontSize: '0.84rem' }}>
           Privacy by design: decentralized identity with on-chain integrity checks and minimal personal data exposure.
         </p>
+        <p className="muted" style={{ marginTop: '0.1rem', fontSize: '0.84rem' }}>
+          Fast signal path: optimized for quick SOS logging and rapid trusted-contact acknowledgment flow.
+        </p>
         <p className="status-text">{statusMessage}</p>
       </section>
 
