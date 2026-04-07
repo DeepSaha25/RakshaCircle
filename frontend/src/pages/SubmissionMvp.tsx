@@ -220,6 +220,31 @@ const SubmissionMvp = () => {
     });
   };
 
+  const handleTestAlertTone = () => {
+    const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextCtor) {
+      setMessage('Audio preview is not supported on this browser.', true);
+      return;
+    }
+
+    const audioContext = new AudioContextCtor();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.type = 'square';
+    oscillator.frequency.value = 1040;
+    gainNode.gain.value = 0.12;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+    window.setTimeout(() => {
+      oscillator.stop();
+      void audioContext.close();
+    }, 600);
+  };
+
   return (
     <main className={`submission-page ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
       {isBusy && (
@@ -414,6 +439,7 @@ const SubmissionMvp = () => {
               <a className="ghost" href="tel:112">Call 112</a>
               <a className="ghost" href="tel:100">Call Police (100)</a>
               <a className="ghost" href="tel:102">Call Ambulance (102)</a>
+              <button className="ghost" type="button" onClick={handleTestAlertTone} disabled={isBusy}>Test Loud Alert Tone</button>
             </div>
           </div>
         </article>
