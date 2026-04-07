@@ -94,7 +94,7 @@ const SubmissionMvp = () => {
           await loadAll(publicKey);
           return;
         } catch {
-          setMessage('Wallet connection failed: Please ensure Freighter is installed, signed in, and set to Stellar Testnet.', true);
+          setMessage('Wallet connection failed. Check that Freighter is installed, unlocked, permission is granted to this site, and network is set to Stellar Testnet. Then retry connect.', true);
           return;
         }
       }
