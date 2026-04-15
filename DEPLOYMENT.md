@@ -60,18 +60,20 @@ ENABLE_DEMO_SEED=false
 
 # Contract settings (set SOROBAN_CONTRACT_ID after Step 3)
 SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
+SOROBAN_NETWORK_PASSPHRASE=Test SDF Network ; September 2015
 SOROBAN_CONTRACT_ID=CCTDYXR5HVBLHG6ZZ3XSSZHBGUUFVPWLN36RVDNRNJVKLQQPPUXUN747
 
 # Optional advanced settings
 NIRBHAYA_SERVICE_URL=
-SERVER_PUBLIC_KEY=
-SERVER_SECRET_KEY=
+SERVER_PUBLIC_KEY=replace_with_backend_signer_public_key
+SERVER_SECRET_KEY=replace_with_backend_signer_secret_key
 FEE_SPONSOR_WALLET=
 ```
 
 Notes:
 - `APP_API_KEY` and frontend `VITE_API_KEY` must be identical.
-- If `SOROBAN_CONTRACT_ID` is empty, backend runs in mock on-chain mode.
+- On-chain writes require both `SOROBAN_CONTRACT_ID` and valid signer keys (`SERVER_PUBLIC_KEY`, `SERVER_SECRET_KEY`).
+- If keys are missing or mismatched, write endpoints return `502` and local state is not mutated.
 
 ## Step 2: Deploy Backend on Render
 
@@ -203,6 +205,8 @@ Production checks:
 4. Save trusted contacts
 5. Trigger SOS
 6. Acknowledge event
+7. Confirm each write response includes `blockchain.txHash`
+8. Open each tx hash on Stellar Expert and verify invoked function + args
 7. Check readiness endpoints:
 - `/api/v1/raksha/metrics`
 - `/api/v1/raksha/monitoring`

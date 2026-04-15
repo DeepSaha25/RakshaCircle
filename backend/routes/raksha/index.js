@@ -8,7 +8,7 @@ const userEvents = new Map();
 const eventsById = new Map();
 
 function normalizeWallet(walletAddress = '') {
-    return walletAddress.trim().toLowerCase();
+    return walletAddress.trim().toUpperCase();
 }
 
 function getEventsForUser(walletAddress) {
@@ -22,6 +22,15 @@ function getEventsForUser(walletAddress) {
 
 function hashContext(value = '') {
     return createHash('sha256').update(value).digest('hex');
+}
+
+function sendBlockchainFailure(reply, action, sorobanResult) {
+    return reply.code(502).send({
+        error: 'Bad Gateway',
+        message: `Failed to record ${action} on Soroban.`,
+        details: sorobanResult?.error || 'Unknown blockchain write failure',
+        blockchain: sorobanResult
+    });
 }
 
 export default async function rakshaRoutes(fastify) {
@@ -46,13 +55,15 @@ export default async function rakshaRoutes(fastify) {
             updatedAt: now
         };
 
-        profiles.set(normalizedWallet, profile);
+        const sorobanResult = await sorobanService.registerUser(normalizedWallet, profile.name);
+        if (!sorobanResult?.success) {
+            return sendBlockchainFailure(reply, 'profile', sorobanResult);
+        }
 
-        // Record on Soroban blockchain
-        const sorobanResult = await sorobanService.registerUser(normalizedWallet, name.trim());
+        profiles.set(normalizedWallet, profile);
         productionReadinessService.recordProfile(profile);
-        
-        return { 
+
+        return {
             profile,
             blockchain: sorobanResult
         };
@@ -91,11 +102,14 @@ export default async function rakshaRoutes(fastify) {
             }));
 
         const normalizedWallet = normalizeWallet(walletAddress);
+        const sorobanResult = await sorobanService.addTrustedContacts(normalizedWallet, validContacts);
+
+        if (!sorobanResult?.success) {
+            return sendBlockchainFailure(reply, 'trusted contacts', sorobanResult);
+        }
+
         trustedContacts.set(normalizedWallet, validContacts);
         productionReadinessService.recordContacts(normalizedWallet, validContacts);
-
-        // Record on Soroban blockchain
-        const sorobanResult = await sorobanService.addTrustedContacts(normalizedWallet, validContacts);
 
         return {
             walletAddress: normalizedWallet,
@@ -138,21 +152,26 @@ export default async function rakshaRoutes(fastify) {
             acknowledgments: []
         };
 
+        const sorobanResult = await sorobanService.triggerSOS(
+            normalizedWallet,
+            event.id,
+            event.eventType,
+            derivedContextHash
+        );
+
+        if (!sorobanResult?.success) {
+            return sendBlockchainFailure(reply, 'SOS event', sorobanResult);
+        }
+
         const events = getEventsForUser(normalizedWallet);
         events.unshift(event);
         eventsById.set(event.id, event);
 
-        // Record on Soroban blockchain
-        const sorobanResult = await sorobanService.triggerSOS(
-            normalizedWallet, 
-            eventType || 'emergency',
-            derivedContextHash
-        );
-
         const feeSponsorship = useFeeSponsorship
             ? await sorobanService.buildFeeSponsoredAction('trigger_sos', {
                 walletAddress: normalizedWallet,
-                eventType: eventType || 'emergency',
+                eventId: event.id,
+                eventType: event.eventType,
                 contextHash: derivedContextHash
             })
             : null;
@@ -197,17 +216,22 @@ export default async function rakshaRoutes(fastify) {
             };
         }
 
-        event.acknowledgments.push({
+        const nextAcknowledgment = {
             contactWallet: normalizedContactWallet,
             note: note ? String(note).trim() : '',
             timestamp: new Date().toISOString()
-        });
+        };
 
+        const sorobanResult = await sorobanService.acknowledgeSOS(eventId, normalizedContactWallet);
+
+        if (!sorobanResult?.success) {
+            return sendBlockchainFailure(reply, 'SOS acknowledgment', sorobanResult);
+        }
+
+        event.acknowledgments.push(nextAcknowledgment);
         event.status = event.acknowledgments.length > 0 ? 'acknowledged' : 'active';
 
-        // Record acknowledgment on Soroban blockchain
-        const sorobanResult = await sorobanService.acknowledgeSOS(eventId, normalizedContactWallet);
-        productionReadinessService.recordAcknowledgment(eventId, event.acknowledgments.at(-1));
+        productionReadinessService.recordAcknowledgment(eventId, nextAcknowledgment);
 
         return {
             message: 'Acknowledgment recorded',
@@ -237,7 +261,7 @@ export default async function rakshaRoutes(fastify) {
         };
     });
 
-    fastify.get('/blockchain-status', async (request) => {
+    fastify.get('/blockchain-status', async () => {
         return sorobanService.getStatus();
     });
 

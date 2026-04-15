@@ -20,6 +20,10 @@ export const config = {
     nirbhayaServiceUrl: process.env.NIRBHAYA_SERVICE_URL || 'http://localhost:8001',
     sorobanRpcUrl: process.env.SOROBAN_RPC_URL || 'https://soroban-testnet.stellar.org',
     sorobanContractId: process.env.SOROBAN_CONTRACT_ID || '',
+    sorobanNetworkPassphrase: process.env.SOROBAN_NETWORK_PASSPHRASE || 'Test SDF Network ; September 2015',
+    serverPublicKey: process.env.SERVER_PUBLIC_KEY || '',
+    serverSecretKey: process.env.SERVER_SECRET_KEY || '',
+    feeSponsorWallet: process.env.FEE_SPONSOR_WALLET || '',
     corsOrigin: process.env.CORS_ORIGIN || '*',
     enableDemoSeed: process.env.ENABLE_DEMO_SEED === 'true',
     rateLimit: {

@@ -46,6 +46,25 @@ Production-ready women safety and emergency coordination platform powered by Ste
 - Indexing: `/api/v1/raksha/indexing`
 - Dashboard: `/api/v1/raksha/dashboard/:wallet`
 
+## On-Chain Write Requirements
+
+To ensure profile, trusted contacts, SOS, and acknowledge flows are truly written on-chain, backend must have:
+
+- `SOROBAN_CONTRACT_ID`
+- `SOROBAN_RPC_URL`
+- `SOROBAN_NETWORK_PASSPHRASE`
+- `SERVER_PUBLIC_KEY`
+- `SERVER_SECRET_KEY`
+
+If these are missing or mismatched, write endpoints return `502` and local state is not persisted.
+
+## Transaction Verification (Stellar Expert)
+
+1. Trigger profile creation, trusted contacts save, SOS, and acknowledge from app.
+2. Confirm each API response includes `blockchain.txHash` and `blockchain.explorerUrl`.
+3. Open each tx in Stellar Expert (`https://stellar.expert/explorer/testnet/tx/<txHash>`).
+4. Verify contract function name and arguments match the API payload.
+
 ## Metrics and Monitoring Submission Proof
 
 - Metrics dashboard proof link: https://rakshacircle-backend.onrender.com/api/v1/raksha/metrics

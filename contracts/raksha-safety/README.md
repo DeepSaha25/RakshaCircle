@@ -23,28 +23,28 @@ Register a new user on the Raksha safety network.
 #### `get_user(wallet: Address) -> Option<UserProfile>`
 Retrieve user profile by wallet address.
 
-#### `add_trusted_contacts(user: Address, contacts: Vec<TrustedContact>)`
+#### `add_trusted_contacts(user: Address, contacts: Vec<Address>)`
 Add or update trusted contacts for a user.
 - Requires user authorization
 - Stores contact list on-chain
 
-#### `get_trusted_contacts(user: Address) -> Vec<TrustedContact>`
+#### `get_trusted_contacts(user: Address) -> Vec<Address>`
 Retrieve trusted contacts for a given user.
 
-#### `trigger_sos(user: Address, event_type: String, context_hash: String) -> SOSEvent`
+#### `trigger_sos(user: Address, event_id: String, event_type: String, context_hash: String) -> SOSEvent`
 Trigger an SOS emergency event.
 - Requires user authorization
 - Creates immutable on-chain record
-- Assigns unique event ID
+- Uses backend-provided event UUID
 - Records timestamp from blockchain
 
-#### `acknowledge_sos(event_id: U256, contact: Address) -> bool`
+#### `acknowledge_sos(event_id: String, contact: Address) -> bool`
 Acknowledge an SOS event as a trusted contact.
 - Requires contact authorization
 - Appends contact to event acknowledgment list
 - Returns success status
 
-#### `get_sos_event(event_id: U256) -> Option<SOSEvent>`
+#### `get_sos_event(event_id: String) -> Option<SOSEvent>`
 Retrieve details of a specific SOS event.
 
 ## Data Structures
@@ -58,18 +58,10 @@ pub struct UserProfile {
 }
 ```
 
-### TrustedContact
-```rust
-pub struct TrustedContact {
-    pub name: String,
-    pub wallet: Address,
-}
-```
-
 ### SOSEvent
 ```rust
 pub struct SOSEvent {
-    pub id: U256,                          // Unique event ID
+    pub id: String,                        // Backend event UUID
     pub user_wallet: Address,              // User who triggered SOS
     pub event_type: String,                // "SOS", "CHECK_IN", etc.
     pub context_hash: String,              // Hash of off-chain data
@@ -82,8 +74,7 @@ pub struct SOSEvent {
 
 - **User Profiles**: Persistent storage, keyed by wallet address
 - **Trusted Circles**: Persistent storage, keyed by user wallet
-- **SOS Events**: Persistent storage, keyed by event ID (U256)
-- **Event Counter**: Persistent storage to generate unique event IDs
+- **SOS Events**: Persistent storage, keyed by backend event ID (String)
 
 All data is stored in Soroban's persistent ledger, ensuring immutability and decentralization.
 
@@ -129,6 +120,24 @@ The Node.js backend will interact with this contract via the Soroban RPC service
 2. User adds trusted contacts → Backend calls `add_trusted_contacts`
 3. User triggers SOS → Backend calls `trigger_sos`
 4. Trusted contact acknowledges → Backend calls `acknowledge_sos`
+
+## Backend Signing Requirement
+
+Chain writes from backend require all of the following env vars:
+
+- `SOROBAN_CONTRACT_ID`
+- `SERVER_PUBLIC_KEY`
+- `SERVER_SECRET_KEY`
+- `SOROBAN_NETWORK_PASSPHRASE`
+
+If these are missing or mismatched, write endpoints should fail fast.
+
+## Verify Transactions in Stellar Expert
+
+1. Trigger profile, contacts, SOS, and acknowledge flows via API.
+2. Copy `blockchain.txHash` from each API response.
+3. Open `https://stellar.expert/explorer/testnet/tx/<txHash>`.
+4. Confirm contract ID, function name, and args match payload.
 
 ## Security Notes
 
